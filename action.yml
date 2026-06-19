@@ -26,6 +26,8 @@ runs:
       env:
         ACTION_PATH: ${{ github.action_path }}
       run: |
+        INCLUDE="${{ inputs.include }}"
+        BADGE_STYLE="${{ inputs.badge-style }}"
         php "$ACTION_PATH/scripts/ReadmeConverter.php" \
-          ${{ inputs.include != '' && format('--include={0}', inputs.include) || '' }} \
-          --badge-style=${{ inputs.badge-style }}
+          ${{ inputs.include != '' && '--include="$INCLUDE"' || '' }} \
+          --badge-style="$BADGE_STYLE"
