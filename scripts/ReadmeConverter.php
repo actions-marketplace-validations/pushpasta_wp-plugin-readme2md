@@ -37,7 +37,6 @@ final class ReadmeConverter
     private string $badgeStyle = 'flat';
     private ?string $repoOwner = null;
     private ?string $repoName = null;
-    private ?string $pluginSlug = null;
 
     public static function main(): int
     {
@@ -53,9 +52,6 @@ final class ReadmeConverter
             $this->parseHeader();
             if ($this->include !== []) {
                 $this->resolveRepoInfo();
-                if (in_array('downloads', $this->include, true)) {
-                    $this->resolvePluginSlug();
-                }
             }
             $this->collectAssets();
             $this->buildMarkdown();
@@ -275,25 +271,6 @@ final class ReadmeConverter
         }
     }
 
-    private function resolvePluginSlug(): void
-    {
-        if (!empty($this->metadata['Contributors'])) {
-            $contributors = array_map('trim', explode(',', $this->metadata['Contributors']));
-            if ($contributors !== []) {
-                $this->pluginSlug = strtolower($contributors[0]);
-                return;
-            }
-        }
-
-        $slug = strtolower($this->pluginName);
-        $slug = preg_replace('/[^a-z0-9-]/', '-', $slug);
-        $slug = preg_replace('/-+/', '-', $slug);
-        $slug = trim($slug, '-');
-        if ($slug !== '') {
-            $this->pluginSlug = $slug;
-        }
-    }
-
     private function execCommand(string $command): ?string
     {
         $output = [];
@@ -385,8 +362,8 @@ final class ReadmeConverter
             'last-commit' => $this->repoOwner !== null
                 ? "![Last Commit](https://img.shields.io/github/last-commit/" . rawurlencode($this->repoOwner) . '/' . rawurlencode($this->repoName) . "?style={$style})"
                 : null,
-            'downloads' => $this->pluginSlug !== null
-                ? "![Downloads](https://img.shields.io/wordpress/plugin/downloads/" . rawurlencode($this->pluginSlug) . "?color=orange&style={$style})"
+            'downloads' => $this->repoOwner !== null
+                ? "![Downloads](https://img.shields.io/github/downloads/" . rawurlencode($this->repoOwner) . '/' . rawurlencode($this->repoName) . "/total?style={$style})"
                 : null,
             default => null,
         };

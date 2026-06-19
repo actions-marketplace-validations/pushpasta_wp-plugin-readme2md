@@ -108,7 +108,7 @@ $expectedBadges = [
     '![Forks](https://img.shields.io/github/forks/test-owner/test-repo?style=flat-square)',
     '![Watchers](https://img.shields.io/github/watchers/test-owner/test-repo?style=flat-square)',
     '![Last Commit](https://img.shields.io/github/last-commit/test-owner/test-repo?style=flat-square)',
-    '![Downloads](https://img.shields.io/wordpress/plugin/downloads/test?color=orange&style=flat-square)',
+    '![Downloads](https://img.shields.io/github/downloads/test-owner/test-repo/total?style=flat-square)',
 ];
 foreach ($expectedBadges as $badge) {
     if (strpos($allBadgesOutput, $badge) === false) {
